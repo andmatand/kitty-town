@@ -8,7 +8,7 @@ class Skin {
     public:
         Skin() {
             animations = NULL;
-            animationIndex = 0;
+            animationIndex = -1;
         }
 
         void SetAnimations(Animation animations[]) {
@@ -16,17 +16,23 @@ class Skin {
         }
 
         Drawable* GetDrawable() {
-            return animationPlayer.GetDrawable();
+            if (animationIndex != -1) {
+                return animationPlayer.GetDrawable();
+            }
+            else {
+                return NULL;
+            }
         }
 
-        void SwitchToAnimation(int index) {
-            std::cout << index << std::endl;
+        void SetCurrentAnimation(int index) {
+            if (index == animationIndex) return;
+
             animationIndex = index;
+            animationPlayer.SetAnimation(&this->animations[animationIndex]);
         }
 
-        void Update(unsigned int timeDelta) {
-            animationPlayer.SetAnimation(&this->animations[animationIndex]);
-            animationPlayer.Update(timeDelta);
+        void Update() {
+            animationPlayer.Update();
         }
 
     private:

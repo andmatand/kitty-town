@@ -15,6 +15,7 @@ class Sprite {
         }
 
         Sprite() {
+            isMirrored = false;
             position.x = 0;
             position.y = 0;
             positionDelta.x = 0;
@@ -31,8 +32,11 @@ class Sprite {
             destRect.w *= GRAPHICS_SCALE;
             destRect.h *= GRAPHICS_SCALE;
 
-            SDL_RenderCopy(RENDERER, drawable->texture, drawable->rect,
-                           &destRect);
+            SDL_RenderCopyEx(RENDERER, drawable->texture,
+                             drawable->rect, &destRect,
+                             0, NULL,
+                             (isMirrored ?
+                              SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE));
 
             delete drawable;
         }
@@ -42,8 +46,8 @@ class Sprite {
             position.y += positionDelta.y;
         }
 
-        void Update(unsigned int timeDelta) {
-            skin.Update(timeDelta);
+        void Update() {
+            skin.Update();
         }
 
         void DoPostPhysics() {
@@ -52,6 +56,7 @@ class Sprite {
         }
 
     protected:
+        bool isMirrored;
         SDL_Rect position;
         Position positionDelta;
         Skin skin;

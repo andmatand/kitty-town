@@ -8,11 +8,14 @@ int main(int argc, char* argv[]) {
 
     Game game;
 
+    unsigned int updateTimer = 999;
     unsigned int timeDelta;
     unsigned int previousTicks = SDL_GetTicks();
     while (true) {
         timeDelta = SDL_GetTicks() - previousTicks;
         previousTicks = SDL_GetTicks();
+
+        updateTimer += timeDelta;
 
         // If the game gave a quit signal
         if (game.ProcessInput()) {
@@ -20,7 +23,15 @@ int main(int argc, char* argv[]) {
             break;
         }
 
-        game.Update(timeDelta);
+        if (updateTimer >= 1000 / FPS) {
+            updateTimer = 0;
+
+            game.Update();
+        }
+        else {
+            cout << "skipped update\n";
+        }
+
         game.Draw(RENDERER);
     }
 
@@ -112,10 +123,10 @@ static void InitSkins() {
     KITTY_ANIMATIONS[1].loop = true;
     KITTY_ANIMATIONS[1].numFrames = 2;
     KITTY_ANIMATIONS[1].frames = new AnimationFrame[2];
-    KITTY_ANIMATIONS[1].frames[0].rect = kittyRect1;
-    KITTY_ANIMATIONS[1].frames[0].delay = 200;
-    KITTY_ANIMATIONS[1].frames[1].rect = kittyRect2;
-    KITTY_ANIMATIONS[1].frames[1].delay = 200;
+    KITTY_ANIMATIONS[1].frames[0].rect = kittyRect2;
+    KITTY_ANIMATIONS[1].frames[0].delay = 4;
+    KITTY_ANIMATIONS[1].frames[1].rect = kittyRect1;
+    KITTY_ANIMATIONS[1].frames[1].delay = 4;
 }
 
 static void DestroySkins() {

@@ -7,10 +7,20 @@ class Character : public Sprite {
     public:
         void KeyPressed(KEY key) {
             if (key == KEY_LEFT) {
-                positionDelta.x = -1;
+                if (isMirrored) {
+                    isMirrored = false;
+                }
+                else {
+                    positionDelta.x = -1;
+                }
             }
             else if (key == KEY_RIGHT) {
-                positionDelta.x = 1;
+                if (!isMirrored) {
+                    isMirrored = true;
+                }
+                else {
+                    positionDelta.x = 1;
+                }
             }
             else if (key == KEY_UP) {
                 positionDelta.y = -1;
@@ -20,19 +30,17 @@ class Character : public Sprite {
             }
         }
 
-        void Update(unsigned int timeDelta) {
-            std::cout << "character update\n";
-
+        void Update() {
             if (positionDelta.x != 0 || positionDelta.y != 0) {
                 // Switch to walking animation
-                skin.SwitchToAnimation(1);
+                skin.SetCurrentAnimation(1);
             }
             else {
-                skin.SwitchToAnimation(0);
+                skin.SetCurrentAnimation(0);
             }
 
             // Call the superclass's Update()
-            Sprite::Update(timeDelta);
+            Sprite::Update();
         }
 };
 

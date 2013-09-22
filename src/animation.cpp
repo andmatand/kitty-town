@@ -25,6 +25,7 @@ class AnimationPlayer {
 
         void SetAnimation(Animation* animation) {
             this->animation = animation;
+            currentFrameIndex = 0;
         }
 
         Drawable* GetDrawable() {
@@ -35,10 +36,10 @@ class AnimationPlayer {
             return drawable;
         }
 
-        void Update(unsigned int timeDelta) {
+        void Update() {
             if (animation == NULL) return;
 
-            frameTimer += timeDelta;
+            frameTimer++;
 
             if (frameTimer >= animation->frames[currentFrameIndex].delay) {
                 frameTimer = 0;

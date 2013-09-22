@@ -3,6 +3,7 @@
 #include <iostream>
 //#include <math.h>
 
+#define FPS 60
 #define GRAPHICS_SCALE 4
 
 SDL_Window* WINDOW;

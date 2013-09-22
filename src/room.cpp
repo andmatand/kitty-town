@@ -23,7 +23,7 @@ class Room {
             }
         }
 
-        void Update(unsigned int timeDelta) {
+        void Update() {
             // Run PreUpdate() on all sprites
             //for (std::vector<Sprite*>::iterator sprite = sprites.begin();
             //     sprite != sprites.end(); sprite++) {
@@ -35,10 +35,10 @@ class Room {
                  sprite != sprites.end(); sprite++) {
                 Character* character = static_cast<Character*>(*sprite);
                 if (character) {
-                    character->Update(timeDelta);
+                    character->Update();
                 }
                 else {
-                    (*sprite)->Update(timeDelta);
+                    (*sprite)->Update();
                 }
             }
 

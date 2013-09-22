@@ -44,8 +44,8 @@ class Game {
             SDL_RenderPresent(renderer);
         }
 
-        void Update(unsigned int timeDelta) {
-            this->currentRoom->Update(timeDelta);
+        void Update() {
+            this->currentRoom->Update();
         }
 
         bool ProcessInput() {
@@ -84,23 +84,23 @@ class Game {
             const Uint8* keyState = SDL_GetKeyboardState(NULL);
 
             if(keyState[SDL_SCANCODE_LEFT] || keyState[SDL_SCANCODE_A]) {
-                static_cast<Character*>(player)->KeyPressed(KEY_LEFT);
+                player->KeyPressed(KEY_LEFT);
             }
             if(keyState[SDL_SCANCODE_RIGHT] || keyState[SDL_SCANCODE_D]) {
-                static_cast<Character*>(player)->KeyPressed(KEY_RIGHT);
+                player->KeyPressed(KEY_RIGHT);
             }
             if(keyState[SDL_SCANCODE_UP] || keyState[SDL_SCANCODE_W]) {
-                static_cast<Character*>(player)->KeyPressed(KEY_UP);
+                player->KeyPressed(KEY_UP);
             }
             if(keyState[SDL_SCANCODE_DOWN] || keyState[SDL_SCANCODE_S]) {
-                static_cast<Character*>(player)->KeyPressed(KEY_DOWN);
+                player->KeyPressed(KEY_DOWN);
             }
 
             return false; // Signal to not quit the program
         }
 
     private:
-        Sprite* player;
+        Character* player;
         Room* currentRoom;
         Room rooms[NUM_ROOMS];
 };
