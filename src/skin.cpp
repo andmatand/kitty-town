@@ -15,11 +15,12 @@ class Skin {
             this->animations = animations;
         }
 
-        Drawable GetDrawable() {
+        Drawable* GetDrawable() {
             return animationPlayer.GetDrawable();
         }
 
-        void SetAnimationIndex(int index) {
+        void SwitchToAnimation(int index) {
+            std::cout << index << std::endl;
             animationIndex = index;
         }
 

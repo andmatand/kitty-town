@@ -6,25 +6,57 @@
 class Room {
     public:
         void AddSprite(Sprite* sprite) {
-            this->sprites.push_back(*sprite);
+            this->sprites.push_back(sprite);
+        }
+
+        void DestroyEverything() {
+            for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+                 sprite != sprites.end(); sprite++) {
+                delete (*sprite);
+            }
         }
 
         void Draw() {
-            for (std::vector<Sprite>::iterator sprite = sprites.begin();
+            for (std::vector<Sprite*>::iterator sprite = sprites.begin();
                  sprite != sprites.end(); sprite++) {
-                sprite->Draw();
+                (*sprite)->Draw();
             }
         }
 
         void Update(unsigned int timeDelta) {
-            for (std::vector<Sprite>::iterator sprite = sprites.begin();
+            // Run PreUpdate() on all sprites
+            //for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+            //     sprite != sprites.end(); sprite++) {
+            //    (*sprite)->PreUpdate();
+            //}
+
+            // Run Update() on all sprites
+            for (std::vector<Sprite*>::iterator sprite = sprites.begin();
                  sprite != sprites.end(); sprite++) {
-                sprite->Update(timeDelta);
+                Character* character = static_cast<Character*>(*sprite);
+                if (character) {
+                    character->Update(timeDelta);
+                }
+                else {
+                    (*sprite)->Update(timeDelta);
+                }
+            }
+
+            // Run DoPhysics() on all sprites
+            for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+                 sprite != sprites.end(); sprite++) {
+                (*sprite)->DoPhysics();
+            }
+
+            // Run DoPostPhysics() on all sprites
+            for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+                 sprite != sprites.end(); sprite++) {
+                (*sprite)->DoPostPhysics();
             }
         }
 
     private:
-        std::vector<Sprite> sprites;
+        std::vector<Sprite*> sprites;
 };
 
 #endif // ROOM_CPP

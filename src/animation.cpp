@@ -27,10 +27,10 @@ class AnimationPlayer {
             this->animation = animation;
         }
 
-        Drawable GetDrawable() {
-            Drawable drawable;
-            drawable.rect = &animation->frames[currentFrameIndex].rect;
-            drawable.texture = animation->texture;
+        Drawable* GetDrawable() {
+            Drawable* drawable = new Drawable;
+            drawable->rect = &animation->frames[currentFrameIndex].rect;
+            drawable->texture = animation->texture;
 
             return drawable;
         }

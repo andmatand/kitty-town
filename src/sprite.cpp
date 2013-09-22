@@ -3,41 +3,58 @@
 
 #include "skin.cpp"
 
+struct Position {
+    int x;
+    int y;
+};
+
 class Sprite {
     public:
-        SDL_Rect GetPosition();
-        Skin GetSkin();
+        SDL_Rect GetPosition() {
+            return position;
+        }
 
         Sprite() {
             position.x = 0;
             position.y = 0;
+            positionDelta.x = 0;
+            positionDelta.y = 0;
         }
 
         void Draw() {
-            Drawable drawable = this->skin.GetDrawable();
+            Drawable* drawable = this->skin.GetDrawable();
 
-            //std::cout << "drawable rect x:" << drawable.rect->x << std::endl;
-            //std::cout << "drawable rect y:" << drawable.rect->y << std::endl;
-            //std::cout << "drawable rect w:" << drawable.rect->w << std::endl;
-            //std::cout << "drawable rect h:" << drawable.rect->h << std::endl;
-            //std::cout << "drawable texture:" << drawable.texture << std::endl;
+            // Make a scaled copy of the destination rect
+            SDL_Rect destRect = position;
+            destRect.x *= GRAPHICS_SCALE;
+            destRect.y *= GRAPHICS_SCALE;
+            destRect.w *= GRAPHICS_SCALE;
+            destRect.h *= GRAPHICS_SCALE;
 
-            //std::cout << "position x:" << position.x << std::endl;
-            //std::cout << "position y:" << position.y << std::endl;
-            //std::cout << "position w:" << position.w << std::endl;
-            //std::cout << "position h:" << position.h << std::endl;
+            SDL_RenderCopy(RENDERER, drawable->texture, drawable->rect,
+                           &destRect);
 
-            SDL_RenderCopy(RENDERER, drawable.texture, drawable.rect,
-                           &this->position);
+            delete drawable;
+        }
+
+        void DoPhysics() {
+            position.x += positionDelta.x;
+            position.y += positionDelta.y;
         }
 
         void Update(unsigned int timeDelta) {
             skin.Update(timeDelta);
         }
 
+        void DoPostPhysics() {
+            positionDelta.x = 0;
+            positionDelta.y = 0;
+        }
+
     protected:
-        Skin skin;
         SDL_Rect position;
+        Position positionDelta;
+        Skin skin;
 };
 
 #endif // SPRITE_CPP
