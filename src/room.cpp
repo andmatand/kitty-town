@@ -1,6 +1,7 @@
 #ifndef ROOM_CPP
 #define ROOM_CPP
 
+#include "camera.cpp"
 #include "sprite.cpp"
 
 class Room {
@@ -16,10 +17,10 @@ class Room {
             }
         }
 
-        void Draw() {
+        void Draw(Camera camera) {
             for (std::vector<Sprite*>::iterator sprite = sprites.begin();
                  sprite != sprites.end(); sprite++) {
-                (*sprite)->Draw();
+                (*sprite)->Draw(camera);
             }
         }
 

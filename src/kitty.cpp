@@ -12,8 +12,8 @@ class Kitty : public Character {
     public:
         Kitty() {
            skin.SetAnimations(KITTY_ANIMATIONS);
-           position.w = KITTY_W;
-           position.h = KITTY_H;
+           size.w = KITTY_W;
+           size.h = KITTY_H;
         }
 };
 

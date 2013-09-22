@@ -67,21 +67,28 @@ static void DestroySDL() {
 static void InitSDL() {
     SDL_Init(SDL_INIT_VIDEO);
 
+    //WINDOW = SDL_CreateWindow("KITTY TOWN",
+    //                          SDL_WINDOWPOS_CENTERED,
+    //                          SDL_WINDOWPOS_CENTERED,
+    //                          0,
+    //                          0,
+    //                          SDL_WINDOW_FULLSCREEN_DESKTOP);
     WINDOW = SDL_CreateWindow("KITTY TOWN",
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
-                              320,
-                              200,
+                              SCALED_SCREEN_W,
+                              SCALED_SCREEN_H,
                               0);
-                              //SDL_WINDOW_FULLSCREEN_DESKTOP);
+
     RENDERER = SDL_CreateRenderer(WINDOW, -1,
                                   SDL_RENDERER_ACCELERATED |
                                   SDL_RENDERER_PRESENTVSYNC);
 
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest"); // ALL the pixels!
+    SDL_RenderSetLogicalSize(RENDERER, SCALED_SCREEN_W, SCALED_SCREEN_H);
+
     // Hide the cursor
     SDL_ShowCursor(0);
-
-    SDL_GetWindowSize(WINDOW, &WINDOW_W, &WINDOW_H);
 }
 
 static void InitAssets() {

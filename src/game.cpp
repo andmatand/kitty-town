@@ -1,6 +1,7 @@
 #ifndef GAME_CPP
 #define GAME_CPP
 
+#include "camera.cpp"
 #include "character.cpp"
 #include "kitty.cpp"
 #include "room.cpp"
@@ -35,10 +36,18 @@ class Game {
 
         void Draw(SDL_Renderer* renderer) {
             // Clear the screen
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             SDL_RenderClear(renderer);
 
+            // Fill the background with a color
+            SDL_SetRenderDrawColor(renderer, 10, 10, 10, 255);
+            SDL_RenderFillRect(renderer, NULL);
+
+            // Center the camera on the player
+            camera.CenterOn(player->GetPosition(), player->GetSize());
+
             // Draw the current room
-            this->currentRoom->Draw();
+            this->currentRoom->Draw(camera);
 
             // Flip the backbuffer
             SDL_RenderPresent(renderer);
@@ -100,6 +109,7 @@ class Game {
         }
 
     private:
+        Camera camera;
         Character* player;
         Room* currentRoom;
         Room rooms[NUM_ROOMS];
