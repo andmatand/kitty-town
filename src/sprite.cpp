@@ -132,7 +132,7 @@ class Sprite {
 
             if ((position1.x <= position2.x + (size2.w - 1) &&
                  position1.x + (size1.w - 1) >= position2.x) &&
-                (position1.y <= position2.y + (size2.h / 2) &&
+                (position1.y + (size1.h / 2) <= position2.y + (size2.h - 1) &&
                  position1.y + (size1.h / 2) >= position2.y)) {
                 return true;
             }

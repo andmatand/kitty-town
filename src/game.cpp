@@ -22,7 +22,7 @@ class Game {
             Kitty* kitty = new Kitty();
             player = kitty;
 
-            player->SetPosition(20, 20);
+            player->SetPosition(27, 20);
 
             Scenery* building = new Scenery(SCENERYTYPE_HOUSE1);
             building->SetPosition(2, 10);
@@ -90,11 +90,11 @@ class Game {
                         }
                     }
                 }
-                //else if (event.type == SDL_KEYDOWN) {
-                //    if (event.key.keysym.sym == SDLK_RIGHT) {
-                //        player->KeyPressed(KEY_RIGHT);
-                //    }
-                //}
+                else if (event.type == SDL_KEYDOWN) {
+                    if (event.key.keysym.sym == SDLK_ESCAPE) {
+                        return true;
+                    }
+                }
             }
 
             const Uint8* keyState = SDL_GetKeyboardState(NULL);

@@ -49,18 +49,18 @@ static void DestroySDL() {
 static void InitSDL() {
     SDL_Init(SDL_INIT_VIDEO);
 
-    //WINDOW = SDL_CreateWindow("KITTY TOWN",
-    //                          SDL_WINDOWPOS_CENTERED,
-    //                          SDL_WINDOWPOS_CENTERED,
-    //                          0,
-    //                          0,
-    //                          SDL_WINDOW_FULLSCREEN_DESKTOP);
     WINDOW = SDL_CreateWindow("KITTY TOWN",
                               SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED,
-                              SCALED_SCREEN_W,
-                              SCALED_SCREEN_H,
-                              0);
+                              0,
+                              0,
+                              SDL_WINDOW_FULLSCREEN_DESKTOP);
+    //WINDOW = SDL_CreateWindow("KITTY TOWN",
+    //                          SDL_WINDOWPOS_CENTERED,
+    //                          SDL_WINDOWPOS_CENTERED,
+    //                          SCALED_SCREEN_W,
+    //                          SCALED_SCREEN_H,
+    //                          0);
 
     RENDERER = SDL_CreateRenderer(WINDOW, -1,
                                   SDL_RENDERER_ACCELERATED |
@@ -128,8 +128,8 @@ static void InitSkins() {
     SDL_Rect house1Rect;
     house1Rect.x = 0;
     house1Rect.y = 0;
-    house1Rect.w = 10;
-    house1Rect.h = 10;
+    house1Rect.w = 21;
+    house1Rect.h = 15;
     HOUSE_ANIMATIONS[0].texture = SCENERY_TEXTURE;
     HOUSE_ANIMATIONS[0].loop = false;
     HOUSE_ANIMATIONS[0].numFrames = 1;
