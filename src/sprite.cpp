@@ -4,6 +4,8 @@
 #include "camera.cpp"
 #include "skin.cpp"
 
+using namespace std;
+
 class Sprite {
     public:
         Sprite() {
@@ -16,8 +18,22 @@ class Sprite {
             size.h = 0;
         }
 
+        virtual ~Sprite() {
+        }
+
+        // Comparison functions For draw-order sorting 
+        bool operator< (const Sprite& rhs) const {
+            return position.y < rhs.position.y;
+        }
+        struct PointerCompare {
+            bool operator()(const Sprite* l, const Sprite* r) {
+                return *l < *r;
+            }
+        };
+
         void Draw(Camera camera) {
             Drawable* drawable = this->skin.GetDrawable();
+            if (drawable == NULL) return;
 
             // Make a destination rect based on our position and size
             SDL_Rect destRect;
@@ -46,9 +62,87 @@ class Sprite {
             delete drawable;
         }
 
-        void DoPhysics() {
-            position.x += positionDelta.x;
-            position.y += positionDelta.y;
+        void DoPhysics(vector<Sprite*>* otherSprites) {
+            if (positionDelta.x == 0 && positionDelta.y == 0) return;
+
+            Position destination;
+            destination.x = position.x + positionDelta.x;
+            destination.y = position.y + positionDelta.y;
+
+            Position tempPosition = position;
+
+            int xIncrement = 0;
+            if (tempPosition.x < destination.x) {
+                xIncrement = 1;
+            }
+            else if (tempPosition.x > destination.x) {
+                xIncrement = -1;
+            }
+
+            int yIncrement = 0;
+            if (tempPosition.y < destination.y) {
+                yIncrement = 1;
+            }
+            else if (tempPosition.y > destination.y) {
+                yIncrement = -1;
+            }
+
+            // Loop until we reach our destination
+            Position previousPosition;
+            bool collided = false;
+            while (tempPosition.x != destination.x ||
+                   tempPosition.y != destination.y) {
+                //previousPosition = tempPosition;
+                previousPosition.x = tempPosition.x;
+                previousPosition.y = tempPosition.y;
+                tempPosition.x += xIncrement;
+                tempPosition.y += yIncrement;
+
+                for (vector<Sprite*>::iterator otherSprite =
+                     (*otherSprites).begin();
+                     otherSprite != (*otherSprites).end(); otherSprite++) {
+                    // If this otherSprite is not us
+                    if (static_cast<Sprite*>(*otherSprite) != this) {
+                        if (RectCollision(tempPosition,
+                                          this->GetSize(),
+                                          (*otherSprite)->GetPosition(),
+                                          (*otherSprite)->GetSize())) {
+                            collided = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (collided) {
+                    tempPosition = previousPosition;
+                    break;
+                }
+            }
+            position = tempPosition;
+        }
+
+        static bool RectCollision(Position position1, Size size1,
+                                  Position position2, Size size2) {
+            //if ((position1.x <= position2.x + (size2.w - 1) &&
+            //     position1.x + (size1.w - 1) >= position2.x) &&
+            //    (position1.y <= position2.y + (size2.h - 1) &&
+            //     position1.y + (size1.h - 1) >= position2.y)) {
+            //    return true;
+            //}
+
+            if ((position1.x <= position2.x + (size2.w - 1) &&
+                 position1.x + (size1.w - 1) >= position2.x) &&
+                (position1.y <= position2.y + (size2.h / 2) &&
+                 position1.y + (size1.h / 2) >= position2.y)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        void DoPostPhysics() {
+            positionDelta.x = 0;
+            positionDelta.y = 0;
         }
 
         Position GetPosition() {
@@ -59,20 +153,19 @@ class Sprite {
             return size;
         }
 
-        void Update() {
-            skin.Update();
+        void SetPosition(int x, int y) {
+            position.x = x;
+            position.y = y;
         }
 
-        void DoPostPhysics() {
-            positionDelta.x = 0;
-            positionDelta.y = 0;
+        virtual void Update() {
         }
 
     protected:
         bool isMirrored;
         Position position;
-        Size size;
         Position positionDelta;
+        Size size;
         Skin skin;
 };
 

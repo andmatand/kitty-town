@@ -1,6 +1,7 @@
 #ifndef CHARACTER_CPP
 #define CHARACTER_CPP
 
+//#include "physicsbody.cpp"
 #include "sprite.cpp"
 
 class Character : public Sprite {
@@ -40,7 +41,9 @@ class Character : public Sprite {
             }
 
             // Call the superclass's Update()
-            Sprite::Update();
+            //PhysicsBody::Update();
+
+            skin.Update();
         }
 };
 

@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <algorithm>
 #include <vector>
 #include <iostream>
 //#include <math.h>
@@ -14,6 +15,7 @@ int SCALED_SCREEN_H = SCREEN_H * GRAPHICS_SCALE;
 SDL_Window* WINDOW;
 SDL_Renderer* RENDERER;
 SDL_Texture* SPRITE_TEXTURE;
+SDL_Texture* SCENERY_TEXTURE;
 
 enum KEY {
     KEY_UP = 0,

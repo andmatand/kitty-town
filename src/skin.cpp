@@ -11,7 +11,7 @@ class Skin {
             animationIndex = -1;
         }
 
-        void SetAnimations(Animation animations[]) {
+        void SetAnimations(Animation* animations) {
             this->animations = animations;
         }
 
@@ -32,7 +32,9 @@ class Skin {
         }
 
         void Update() {
-            animationPlayer.Update();
+            if (animationIndex != -1) {
+                animationPlayer.Update();
+            }
         }
 
     private:

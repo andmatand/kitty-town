@@ -35,24 +35,6 @@ int main(int argc, char* argv[]) {
         game.Draw(RENDERER);
     }
 
-    /*
-        SDL_Event e;
-        if (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT)
-                break;
-            else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_ESCAPE)
-                break;
-            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP)
-                y -= .2 * timeDelta;
-            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN)
-                y += .2 * timeDelta;
-            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT)
-                x -= .2 * timeDelta;
-            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT)
-                x += .2 * timeDelta;
-        } 
-    */
-
     DestroyEverything();
 
     return 0;
@@ -92,14 +74,15 @@ static void InitSDL() {
 }
 
 static void InitAssets() {
-    // Load the sprite sheet into a surface
+    // Load the sprite texture
     SDL_Surface* spriteSurface = SDL_LoadBMP("res/img/sprites.bmp");
-
-    // Create a texture from the sprite surface
     SPRITE_TEXTURE = SDL_CreateTextureFromSurface(RENDERER, spriteSurface);
-
-    // Free the sprite sheet surface
     SDL_FreeSurface(spriteSurface);
+
+    // Load the scenery texture
+    SDL_Surface* scenerySurface = SDL_LoadBMP("res/img/scenery.bmp");
+    SCENERY_TEXTURE = SDL_CreateTextureFromSurface(RENDERER, scenerySurface);
+    SDL_FreeSurface(scenerySurface);
 }
 
 void DestroyAssets() {
@@ -119,6 +102,9 @@ static void InitSkins() {
     kittyRect2.w = KITTY_W;
     kittyRect2.h = KITTY_H;
 
+    KITTY_ANIMATIONS = new Animation[NUM_KITTY_ANIMATIONS];
+
+    // Create the kitty standing animation
     KITTY_ANIMATIONS[0].texture = SPRITE_TEXTURE;
     KITTY_ANIMATIONS[0].loop = false;
     KITTY_ANIMATIONS[0].numFrames = 1;
@@ -126,6 +112,7 @@ static void InitSkins() {
     KITTY_ANIMATIONS[0].frames[0].rect = kittyRect1;
     KITTY_ANIMATIONS[0].frames[0].delay = 0;
 
+    // Create the kitty walking animation
     KITTY_ANIMATIONS[1].texture = SPRITE_TEXTURE;
     KITTY_ANIMATIONS[1].loop = true;
     KITTY_ANIMATIONS[1].numFrames = 2;
@@ -134,9 +121,31 @@ static void InitSkins() {
     KITTY_ANIMATIONS[1].frames[0].delay = 4;
     KITTY_ANIMATIONS[1].frames[1].rect = kittyRect1;
     KITTY_ANIMATIONS[1].frames[1].delay = 4;
+
+    HOUSE_ANIMATIONS = new Animation[NUM_HOUSE_ANIMATIONS];
+
+    // Define the house 1 animation
+    SDL_Rect house1Rect;
+    house1Rect.x = 0;
+    house1Rect.y = 0;
+    house1Rect.w = 10;
+    house1Rect.h = 10;
+    HOUSE_ANIMATIONS[0].texture = SCENERY_TEXTURE;
+    HOUSE_ANIMATIONS[0].loop = false;
+    HOUSE_ANIMATIONS[0].numFrames = 1;
+    HOUSE_ANIMATIONS[0].frames = new AnimationFrame[1];
+    HOUSE_ANIMATIONS[0].frames[0].rect = house1Rect;
+    HOUSE_ANIMATIONS[0].frames[0].delay = 0;
 }
 
 static void DestroySkins() {
+    for (int i = 0; i < NUM_KITTY_ANIMATIONS; i++) {
+        delete KITTY_ANIMATIONS[i].frames;
+    }
+
+    for (int i = 0; i < NUM_HOUSE_ANIMATIONS; i++) {
+        delete HOUSE_ANIMATIONS[i].frames;
+    }
 }
 
 static void InitEverything() {

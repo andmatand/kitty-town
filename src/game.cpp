@@ -5,6 +5,7 @@
 #include "character.cpp"
 #include "kitty.cpp"
 #include "room.cpp"
+#include "scenery.cpp"
 #include "sprite.cpp"
 
 #define NUM_ROOMS 1
@@ -20,6 +21,12 @@ class Game {
             Room* town = new Room();
             Kitty* kitty = new Kitty();
             player = kitty;
+
+            player->SetPosition(20, 20);
+
+            Scenery* building = new Scenery(SCENERYTYPE_HOUSE1);
+            building->SetPosition(2, 10);
+            town->AddSprite(building);
 
             town->AddSprite(kitty);
             this->rooms[0] = *town;
