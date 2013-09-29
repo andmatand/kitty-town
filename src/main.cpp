@@ -1,7 +1,4 @@
-#include "main.h"
-#include "game.cpp"
-
-using namespace std;
+#include "main.hpp"
 
 int main(int argc, char* argv[]) {
     InitEverything();
@@ -29,7 +26,7 @@ int main(int argc, char* argv[]) {
             game.Update();
         }
         else {
-            cout << "skipped update\n";
+            std::cout << "skipped update\n";
         }
 
         game.Draw(RENDERER);
@@ -40,10 +37,48 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+static void DestroyAssets() {
+    SDL_DestroyTexture(SPRITE_TEXTURE);
+}
+
+static void DestroyEverything() {
+    DestroySkins();
+    DestroyAssets();
+    DestroySDL();
+}
+
 static void DestroySDL() {
     SDL_DestroyRenderer(RENDERER);
     SDL_DestroyWindow(WINDOW);
     SDL_Quit();
+}
+
+static void DestroySkins() {
+    for (int i = 0; i < NUM_KITTY_ANIMATIONS; i++) {
+        delete KITTY_ANIMATIONS[i].frames;
+    }
+
+    for (int i = 0; i < NUM_HOUSE_ANIMATIONS; i++) {
+        delete HOUSE_ANIMATIONS[i].frames;
+    }
+}
+
+static void InitAssets() {
+    // Load the sprite texture
+    SDL_Surface* spriteSurface = SDL_LoadBMP("res/img/sprites.bmp");
+    SPRITE_TEXTURE = SDL_CreateTextureFromSurface(RENDERER, spriteSurface);
+    SDL_FreeSurface(spriteSurface);
+
+    // Load the scenery texture
+    SDL_Surface* scenerySurface = SDL_LoadBMP("res/img/scenery.bmp");
+    SCENERY_TEXTURE = SDL_CreateTextureFromSurface(RENDERER, scenerySurface);
+    SDL_FreeSurface(scenerySurface);
+}
+
+static void InitEverything() {
+    InitSDL();
+    InitAssets();
+    InitSkins();
 }
 
 static void InitSDL() {
@@ -73,22 +108,6 @@ static void InitSDL() {
     SDL_ShowCursor(0);
 }
 
-static void InitAssets() {
-    // Load the sprite texture
-    SDL_Surface* spriteSurface = SDL_LoadBMP("res/img/sprites.bmp");
-    SPRITE_TEXTURE = SDL_CreateTextureFromSurface(RENDERER, spriteSurface);
-    SDL_FreeSurface(spriteSurface);
-
-    // Load the scenery texture
-    SDL_Surface* scenerySurface = SDL_LoadBMP("res/img/scenery.bmp");
-    SCENERY_TEXTURE = SDL_CreateTextureFromSurface(RENDERER, scenerySurface);
-    SDL_FreeSurface(scenerySurface);
-}
-
-void DestroyAssets() {
-    SDL_DestroyTexture(SPRITE_TEXTURE);
-}
-
 static void InitSkins() {
     SDL_Rect kittyRect1;
     kittyRect1.x = 0;
@@ -101,8 +120,6 @@ static void InitSkins() {
     kittyRect2.y = 0;
     kittyRect2.w = KITTY_W;
     kittyRect2.h = KITTY_H;
-
-    KITTY_ANIMATIONS = new Animation[NUM_KITTY_ANIMATIONS];
 
     // Create the kitty standing animation
     KITTY_ANIMATIONS[0].texture = SPRITE_TEXTURE;
@@ -122,8 +139,6 @@ static void InitSkins() {
     KITTY_ANIMATIONS[1].frames[1].rect = kittyRect1;
     KITTY_ANIMATIONS[1].frames[1].delay = 4;
 
-    HOUSE_ANIMATIONS = new Animation[NUM_HOUSE_ANIMATIONS];
-
     // Define the house 1 animation
     SDL_Rect house1Rect;
     house1Rect.x = 0;
@@ -136,26 +151,4 @@ static void InitSkins() {
     HOUSE_ANIMATIONS[0].frames = new AnimationFrame[1];
     HOUSE_ANIMATIONS[0].frames[0].rect = house1Rect;
     HOUSE_ANIMATIONS[0].frames[0].delay = 0;
-}
-
-static void DestroySkins() {
-    for (int i = 0; i < NUM_KITTY_ANIMATIONS; i++) {
-        delete KITTY_ANIMATIONS[i].frames;
-    }
-
-    for (int i = 0; i < NUM_HOUSE_ANIMATIONS; i++) {
-        delete HOUSE_ANIMATIONS[i].frames;
-    }
-}
-
-static void InitEverything() {
-    InitSDL();
-    InitAssets();
-    InitSkins();
-}
-
-static void DestroyEverything() {
-    DestroySkins();
-    DestroyAssets();
-    DestroySDL();
 }

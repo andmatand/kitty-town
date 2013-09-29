@@ -1,68 +1,53 @@
-#ifndef ROOM_CPP
-#define ROOM_CPP
+#include "room.hpp"
 
-#include "camera.cpp"
-#include "sprite.cpp"
+void Room::AddSprite(Sprite* sprite) {
+    this->sprites.push_back(sprite);
+}
 
-using namespace std;
+void Room::DestroyEverything() {
+    for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+         sprite != sprites.end(); sprite++) {
+        delete (*sprite);
+    }
+}
 
-class Room {
-    public:
-        void AddSprite(Sprite* sprite) {
-            this->sprites.push_back(sprite);
-        }
+void Room::Draw(Camera camera) {
+    SortSpritesForDrawOrder();
 
-        void DestroyEverything() {
-            for (vector<Sprite*>::iterator sprite = sprites.begin();
-                 sprite != sprites.end(); sprite++) {
-                delete (*sprite);
-            }
-        }
+    for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+         sprite != sprites.end(); sprite++) {
+        (*sprite)->Draw(camera);
+    }
+}
 
-        void Draw(Camera camera) {
-            SortSpritesForDrawOrder();
+void Room::SortSpritesForDrawOrder() {
+    std::sort(sprites.begin(), sprites.end(), Sprite::PointerCompare());
+}
 
-            for (vector<Sprite*>::iterator sprite = sprites.begin();
-                 sprite != sprites.end(); sprite++) {
-                (*sprite)->Draw(camera);
-            }
-        }
+void Room::Update() {
+    // Run Update() on all sprites
+    for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+         sprite != sprites.end(); sprite++) {
+        (*sprite)->Update();
+    }
 
-        void SortSpritesForDrawOrder() {
-            //std::sort(sprites.begin(), sprites.end());
-            std::sort(sprites.begin(), sprites.end(), Sprite::PointerCompare());
-        }
+    // Run DoPhysics() on all sprites that are PhysicsBody objects
+    for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+         sprite != sprites.end(); sprite++) {
+        //PhysicsBody* physicsBody = static_cast<PhysicsBody*>(*sprite);
+        //if (physicsBody) {
+        //    physicsBody->DoPhysics(&sprites);
+        //}
+        (*sprite)->DoPhysics(&sprites);
+    }
 
-        void Update() {
-            // Run Update() on all sprites
-            for (vector<Sprite*>::iterator sprite = sprites.begin();
-                 sprite != sprites.end(); sprite++) {
-                (*sprite)->Update();
-            }
-
-            // Run DoPhysics() on all sprites that are PhysicsBody objects
-            for (vector<Sprite*>::iterator sprite = sprites.begin();
-                 sprite != sprites.end(); sprite++) {
-                //PhysicsBody* physicsBody = static_cast<PhysicsBody*>(*sprite);
-                //if (physicsBody) {
-                //    physicsBody->DoPhysics(&sprites);
-                //}
-                (*sprite)->DoPhysics(&sprites);
-            }
-
-            // Run DoPostPhysics() on all sprites that are PhysicsBody objects
-            for (vector<Sprite*>::iterator sprite = sprites.begin();
-                 sprite != sprites.end(); sprite++) {
-                //PhysicsBody* physicsBody = static_cast<PhysicsBody*>(*sprite);
-                //if (physicsBody) {
-                //    physicsBody->DoPostPhysics();
-                //}
-                (*sprite)->DoPostPhysics();
-            }
-        }
-
-    private:
-        vector<Sprite*> sprites;
-};
-
-#endif // ROOM_CPP
+    // Run DoPostPhysics() on all sprites that are PhysicsBody objects
+    for (std::vector<Sprite*>::iterator sprite = sprites.begin();
+         sprite != sprites.end(); sprite++) {
+        //PhysicsBody* physicsBody = static_cast<PhysicsBody*>(*sprite);
+        //if (physicsBody) {
+        //    physicsBody->DoPostPhysics();
+        //}
+        (*sprite)->DoPostPhysics();
+    }
+}

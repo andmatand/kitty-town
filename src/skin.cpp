@@ -1,46 +1,29 @@
-#ifndef SKIN_CPP
-#define SKIN_CPP
+#include "skin.hpp"
 
-#include "animation.cpp"
-#include "drawable.cpp"
+Skin::Skin() : animations(NULL), animationIndex(-1) {};
 
-class Skin {
-    public:
-        Skin() {
-            animations = NULL;
-            animationIndex = -1;
-        }
+void Skin::SetAnimations(Animation* animations) {
+    this->animations = animations;
+}
 
-        void SetAnimations(Animation* animations) {
-            this->animations = animations;
-        }
+Drawable* Skin::GetDrawable() {
+    if (animationIndex != -1) {
+        return animationPlayer.GetDrawable();
+    }
+    else {
+        return NULL;
+    }
+}
 
-        Drawable* GetDrawable() {
-            if (animationIndex != -1) {
-                return animationPlayer.GetDrawable();
-            }
-            else {
-                return NULL;
-            }
-        }
+void Skin::SetCurrentAnimation(int index) {
+    if (index == animationIndex) return;
 
-        void SetCurrentAnimation(int index) {
-            if (index == animationIndex) return;
+    animationIndex = index;
+    animationPlayer.SetAnimation(&this->animations[animationIndex]);
+}
 
-            animationIndex = index;
-            animationPlayer.SetAnimation(&this->animations[animationIndex]);
-        }
-
-        void Update() {
-            if (animationIndex != -1) {
-                animationPlayer.Update();
-            }
-        }
-
-    private:
-        Animation* animations;
-        AnimationPlayer animationPlayer;
-        int animationIndex;
-};
-
-#endif // SKIN_CPP
+void Skin::Update() {
+    if (animationIndex != -1) {
+        animationPlayer.Update();
+    }
+}

@@ -1,64 +1,39 @@
-#ifndef ANIMATION_CPP
-#define ANIMATION_CPP
+#include "animation.hpp"
 
-#include "drawable.cpp"
+AnimationPlayer::AnimationPlayer() {
+    animation = NULL;
+    currentFrameIndex = 0;
+    frameTimer = 0;
+}
 
-struct AnimationFrame {
-    SDL_Rect rect;
-    unsigned int delay;
-};
+Drawable* AnimationPlayer::GetDrawable() {
+    Drawable* drawable = new Drawable;
+    drawable->rect = &animation->frames[currentFrameIndex].rect;
+    drawable->texture = animation->texture;
 
-struct Animation {
-    SDL_Texture* texture;
-    AnimationFrame* frames;
-    int numFrames;
-    bool loop;
-};
+    return drawable;
+}
 
-class AnimationPlayer {
-    public:
-        AnimationPlayer() {
-            animation = NULL;
-            currentFrameIndex = 0;
-            frameTimer = 0;
+void AnimationPlayer::SetAnimation(Animation* animation) {
+    this->animation = animation;
+    currentFrameIndex = 0;
+}
+
+void AnimationPlayer::Update() {
+    if (animation == NULL) return;
+
+    frameTimer++;
+
+    if (frameTimer >= animation->frames[currentFrameIndex].delay) {
+        frameTimer = 0;
+
+        if (currentFrameIndex < animation->numFrames - 1) {
+            currentFrameIndex++;
         }
-
-        void SetAnimation(Animation* animation) {
-            this->animation = animation;
-            currentFrameIndex = 0;
-        }
-
-        Drawable* GetDrawable() {
-            Drawable* drawable = new Drawable;
-            drawable->rect = &animation->frames[currentFrameIndex].rect;
-            drawable->texture = animation->texture;
-
-            return drawable;
-        }
-
-        void Update() {
-            if (animation == NULL) return;
-
-            frameTimer++;
-
-            if (frameTimer >= animation->frames[currentFrameIndex].delay) {
-                frameTimer = 0;
-
-                if (currentFrameIndex < animation->numFrames - 1) {
-                    currentFrameIndex++;
-                }
-                else {
-                    if (animation->loop) {
-                        currentFrameIndex = 0;
-                    }
-                }
+        else {
+            if (animation->loop) {
+                currentFrameIndex = 0;
             }
         }
-
-    private:
-        Animation* animation;
-        int currentFrameIndex;
-        unsigned int frameTimer;
-};
-
-#endif // ANIMATION_CPP
+    }
+}
