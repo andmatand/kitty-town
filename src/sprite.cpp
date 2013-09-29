@@ -23,7 +23,7 @@ class Sprite {
 
         // Comparison functions For draw-order sorting 
         bool operator< (const Sprite& rhs) const {
-            return position.y < rhs.position.y;
+            return position.y + size.h < rhs.position.y + rhs.size.h;
         }
         struct PointerCompare {
             bool operator()(const Sprite* l, const Sprite* r) {
