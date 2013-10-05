@@ -1,7 +1,7 @@
 #include "main.hpp"
 
 // DEBUG
-#include <iostream>
+//#include <iostream>
 
 int main(int argc, char* argv[]) {
     InitSDL();
@@ -29,9 +29,9 @@ int main(int argc, char* argv[]) {
 
             game.Update();
         }
-        else {
-            std::cout << "skipped update\n";
-        }
+        //else {
+        //    std::cout << "skipped update\n";
+        //}
 
         game.Draw(RENDERER);
     }

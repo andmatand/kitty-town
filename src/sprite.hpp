@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "camera.hpp"
-#include "collisionmask.hpp"
 #include "drawable.hpp"
 #include "position.hpp"
 #include "size.hpp"
@@ -30,7 +29,8 @@ class Sprite {
         void Draw(Camera);
         Position GetPosition() { return position; };
         Size GetSize() { return size; };
-        void SetCollisionMask(CollisionMask*);
+        Skin* GetSkin() { return skin; };
+        bool IsMirrored() { return isMirrored; };
         void SetPosition(int x, int y);
         void SetRoom(Room* room) { this->room = room; };
         virtual void Update();
@@ -40,7 +40,6 @@ class Sprite {
         virtual void PostMove();
 
     protected:
-        CollisionMask* collisionMask;
         bool isMirrored;
         Position position;
         Room* room;

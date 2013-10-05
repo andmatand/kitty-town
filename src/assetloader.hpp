@@ -7,7 +7,7 @@
 #include "globals.hpp"
 
 #define NUM_SPRITE_RECTS 5
-#define NUM_COLLISION_MASKS 1
+#define NUM_COLLISION_MASKS 2
 #define NUM_ANIMATIONS 2
 
 namespace AssetLoader {

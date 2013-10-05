@@ -62,7 +62,7 @@ namespace AssetLoader {
     void InitAnimations() {
         ANIMATIONS = new Animation[NUM_ANIMATIONS];
 
-        // Kitty - default
+        // kitty - default
         ANIMATIONS[0].texture = SPRITE_TEXTURE;
         ANIMATIONS[0].loop = false;
         ANIMATIONS[0].numFrames = 1;
@@ -71,14 +71,14 @@ namespace AssetLoader {
         ANIMATIONS[0].frames[0].delay = 0;
         ANIMATIONS[0].frames[0].collisionMask = COLLISION_MASKS[0];
 
-        // Kitty - walk
+        // kitty - walk
         ANIMATIONS[1].texture = SPRITE_TEXTURE;
         ANIMATIONS[1].loop = true;
         ANIMATIONS[1].numFrames = 2;
         ANIMATIONS[1].frames = new AnimationFrame[2];
         ANIMATIONS[1].frames[0].rect = SPRITE_RECTS[1];
         ANIMATIONS[1].frames[0].delay = 4;
-        ANIMATIONS[1].frames[0].collisionMask = NULL;
+        ANIMATIONS[1].frames[0].collisionMask = COLLISION_MASKS[0];
         ANIMATIONS[1].frames[1].rect = SPRITE_RECTS[0];
         ANIMATIONS[1].frames[1].delay = 4;
         ANIMATIONS[1].frames[1].collisionMask = COLLISION_MASKS[0];
@@ -87,10 +87,17 @@ namespace AssetLoader {
     void InitCollisionMaskRects() {
         COLLISION_MASK_RECTS = new SDL_Rect[NUM_COLLISION_MASKS];
 
+        // kitty
         COLLISION_MASK_RECTS[0].x = 0;
         COLLISION_MASK_RECTS[0].y = 0;
         COLLISION_MASK_RECTS[0].w = 7;
         COLLISION_MASK_RECTS[0].h = 5;
+
+        // house1
+        COLLISION_MASK_RECTS[1].x = 0;
+        COLLISION_MASK_RECTS[1].y = 5;
+        COLLISION_MASK_RECTS[1].w = 21;
+        COLLISION_MASK_RECTS[1].h = 15;
     }
 
     void InitCollisionMasks() {

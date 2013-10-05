@@ -39,10 +39,6 @@ void Sprite::Draw(Camera camera) {
                      (isMirrored ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE));
 }
 
-void Sprite::SetCollisionMask(CollisionMask* collisionMask) {
-    this->collisionMask = collisionMask;
-}
-
 void Sprite::SetPosition(int x, int y) {
     position.x = x; position.y = y;
 }
