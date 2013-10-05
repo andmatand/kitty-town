@@ -1,11 +1,13 @@
 #ifndef CHARACTER_HPP
 #define CHARACTER_HPP
 
+#include "characterskin.hpp"
 #include "key.hpp"
-#include "sprite.hpp"
+#include "physicsbody.hpp"
 
-class Character : public Sprite {
+class Character : public PhysicsBody {
     public:
+        Character();
         void KeyPressed(KEY);
         void Update();
 };

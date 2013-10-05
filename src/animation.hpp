@@ -1,11 +1,14 @@
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
 
+#include <SDL2/SDL.h>
+#include "collisionmask.hpp"
 #include "drawable.hpp"
 
 struct AnimationFrame {
     SDL_Rect rect;
     unsigned int delay;
+    CollisionMask* collisionMask;
 };
 
 struct Animation {
@@ -13,19 +16,6 @@ struct Animation {
     AnimationFrame* frames;
     int numFrames;
     bool loop;
-};
-
-class AnimationPlayer {
-    public:
-        AnimationPlayer();
-        Drawable* GetDrawable();
-        void SetAnimation(Animation*);
-        void Update();
-
-    private:
-        Animation* animation;
-        int currentFrameIndex;
-        unsigned int frameTimer;
 };
 
 #endif // ANIMATION_HPP

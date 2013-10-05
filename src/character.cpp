@@ -1,5 +1,9 @@
 #include "character.hpp"
 
+Character::Character() {
+    skin = new CharacterSkin();
+}
+
 void Character::KeyPressed(KEY key) {
     if (key == KEY_LEFT) {
         if (isMirrored) {
@@ -26,13 +30,14 @@ void Character::KeyPressed(KEY key) {
 }
 
 void Character::Update() {
+    CharacterSkin* skin = static_cast<CharacterSkin*>(this->skin);
+
     if (positionDelta.x != 0 || positionDelta.y != 0) {
-        // Switch to walking animation
-        skin.SetCurrentAnimation(1);
+        skin->SetAnimationState(CHARACTER_ANIMATION_STATE::WALK);
     }
     else {
-        skin.SetCurrentAnimation(0);
+        skin->SetAnimationState(CHARACTER_ANIMATION_STATE::DEFAULT);
     }
 
-    skin.Update();
+    skin->Update();
 }

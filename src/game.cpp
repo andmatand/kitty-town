@@ -2,22 +2,19 @@
 
 Game::Game() {
     CreateRooms();
+
     this->currentRoom = &this->rooms[0];
 }
 
 void Game::CreateRooms() {
-    Room* town = new Room();
-    Kitty* kitty = new Kitty();
-    player = kitty;
-
+    player = new Kitty();
     player->SetPosition(27, 20);
 
-    Scenery* building = new Scenery(SCENERYTYPE_HOUSE1);
-    building->SetPosition(2, 10);
-    town->AddSprite(building);
+    Fixture* house = new Fixture(FIXTURE_TYPE::HOUSE1);
+    house->SetPosition(5, 10);
 
-    town->AddSprite(kitty);
-    this->rooms[0] = *town;
+    rooms[0].AddSprite(house);
+    rooms[0].AddSprite(player);
 }
 
 void Game::DestroyEverything() {

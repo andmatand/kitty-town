@@ -31,14 +31,10 @@ void Room::Update() {
         (*sprite)->Update();
     }
 
-    // Run DoPhysics() on all sprites that are PhysicsBody objects
+    // Run Move() on all PhysicsBody objects
     for (std::vector<Sprite*>::iterator sprite = sprites.begin();
          sprite != sprites.end(); sprite++) {
-        //PhysicsBody* physicsBody = static_cast<PhysicsBody*>(*sprite);
-        //if (physicsBody) {
-        //    physicsBody->DoPhysics(&sprites);
-        //}
-        (*sprite)->DoPhysics(&sprites);
+        static_cast<PhysicsBody*>(*sprite)->Move(&sprites);
     }
 
     // Run DoPostPhysics() on all sprites that are PhysicsBody objects
@@ -48,6 +44,6 @@ void Room::Update() {
         //if (physicsBody) {
         //    physicsBody->DoPostPhysics();
         //}
-        (*sprite)->DoPostPhysics();
+        static_cast<PhysicsBody*>(*sprite)->PostMove();
     }
 }

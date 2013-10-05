@@ -1,84 +1,15 @@
 #include "sprite.hpp"
 
-Sprite::Sprite() {
-    isMirrored = false;
-    position.x = 0;
-    position.y = 0;
-    positionDelta.x = 0;
-    positionDelta.y = 0;
-    size.w = 0;
-    size.h = 0;
+Sprite::Sprite() : isMirrored(false), skin(NULL) {
 }
 
 Sprite::~Sprite() {
-}
-
-void Sprite::DoPhysics(std::vector<Sprite*>* otherSprites) {
-    if (positionDelta.x == 0 && positionDelta.y == 0) return;
-
-    Position destination;
-    destination.x = position.x + positionDelta.x;
-    destination.y = position.y + positionDelta.y;
-
-    Position tempPosition = position;
-
-    int xIncrement = 0;
-    if (tempPosition.x < destination.x) {
-        xIncrement = 1;
-    }
-    else if (tempPosition.x > destination.x) {
-        xIncrement = -1;
-    }
-
-    int yIncrement = 0;
-    if (tempPosition.y < destination.y) {
-        yIncrement = 1;
-    }
-    else if (tempPosition.y > destination.y) {
-        yIncrement = -1;
-    }
-
-    // Loop until we reach our destination
-    Position previousPosition;
-    bool collided = false;
-    while (tempPosition.x != destination.x ||
-           tempPosition.y != destination.y) {
-        //previousPosition = tempPosition;
-        previousPosition.x = tempPosition.x;
-        previousPosition.y = tempPosition.y;
-        tempPosition.x += xIncrement;
-        tempPosition.y += yIncrement;
-
-        for (std::vector<Sprite*>::iterator otherSprite =
-             (*otherSprites).begin();
-             otherSprite != (*otherSprites).end(); otherSprite++) {
-            // If this otherSprite is not us
-            if (static_cast<Sprite*>(*otherSprite) != this) {
-                if (RectCollision(tempPosition,
-                                  this->GetSize(),
-                                  (*otherSprite)->GetPosition(),
-                                  (*otherSprite)->GetSize())) {
-                    collided = true;
-                    break;
-                }
-            }
-        }
-
-        if (collided) {
-            tempPosition = previousPosition;
-            break;
-        }
-    }
-    position = tempPosition;
-}
-
-void Sprite::DoPostPhysics() {
-    positionDelta.x = 0;
-    positionDelta.y = 0;
+    delete skin;
+    skin = NULL;
 }
 
 void Sprite::Draw(Camera camera) {
-    Drawable* drawable = this->skin.GetDrawable();
+    Drawable* drawable = skin->GetDrawable();
     if (drawable == NULL) return;
 
     // Make a destination rect based on our position and size
@@ -106,28 +37,19 @@ void Sprite::Draw(Camera camera) {
                      0,
                      NULL,
                      (isMirrored ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE));
-
-    delete drawable;
 }
 
-bool Sprite::RectCollision(Position position1, Size size1,
-                           Position position2, Size size2) {
-    //if ((position1.x <= position2.x + (size2.w - 1) &&
-    //     position1.x + (size1.w - 1) >= position2.x) &&
-    //    (position1.y <= position2.y + (size2.h - 1) &&
-    //     position1.y + (size1.h - 1) >= position2.y)) {
-    //    return true;
-    //}
+void Sprite::SetCollisionMask(CollisionMask* collisionMask) {
+    this->collisionMask = collisionMask;
+}
 
-    if ((position1.x <= position2.x + (size2.w - 1) &&
-         position1.x + (size1.w - 1) >= position2.x) &&
-        (position1.y + (size1.h / 2) <= position2.y + (size2.h - 1) &&
-         position1.y + (size1.h / 2) >= position2.y)) {
-        return true;
-    }
-
-    return false;
+void Sprite::SetPosition(int x, int y) {
+    position.x = x; position.y = y;
 }
 
 void Sprite::Update() {
 }
+
+// Virtual methods for PhysicsBody
+void Sprite::Move(std::vector<Sprite*>*) {}
+void Sprite::PostMove() {}

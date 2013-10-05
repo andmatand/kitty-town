@@ -1,13 +1,22 @@
-#include "animation.hpp"
+#include "animationplayer.hpp"
 
 AnimationPlayer::AnimationPlayer() {
     animation = NULL;
     currentFrameIndex = 0;
     frameTimer = 0;
+    drawable = new Drawable();
+}
+
+AnimationPlayer::~AnimationPlayer() {
+    delete drawable;
+    drawable = NULL;
+}
+
+CollisionMask* AnimationPlayer::GetCollisionMask() {
+    return animation->frames[currentFrameIndex].collisionMask;
 }
 
 Drawable* AnimationPlayer::GetDrawable() {
-    Drawable* drawable = new Drawable;
     drawable->rect = &animation->frames[currentFrameIndex].rect;
     drawable->texture = animation->texture;
 

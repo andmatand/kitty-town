@@ -13,7 +13,17 @@ extern int SCALED_SCREEN_H;
 
 extern SDL_Window* WINDOW;
 extern SDL_Renderer* RENDERER;
+
 extern SDL_Texture* SPRITE_TEXTURE;
-extern SDL_Texture* SCENERY_TEXTURE;
+extern SDL_Texture* BG_TEXTURE;
+
+extern SDL_Rect* COLLISION_MASK_RECTS;
+extern SDL_Rect* SPRITE_RECTS;
+
+class Animation;
+extern Animation* ANIMATIONS;
+
+class CollisionMask;
+extern CollisionMask** COLLISION_MASKS;
 
 #endif // GLOBALS_HPP

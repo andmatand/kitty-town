@@ -5,9 +5,9 @@
 
 #include "camera.hpp"
 #include "character.hpp"
+#include "fixture.hpp"
 #include "kitty.hpp"
 #include "room.hpp"
-#include "scenery.hpp"
 #include "sprite.hpp"
 
 #define NUM_ROOMS 1

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "camera.hpp"
+#include "collisionmask.hpp"
 #include "drawable.hpp"
 #include "position.hpp"
 #include "size.hpp"
@@ -26,23 +27,25 @@ class Sprite {
             }
         };
 
-        void DoPhysics(std::vector<Sprite*>*);
-        void DoPostPhysics();
         void Draw(Camera);
         Position GetPosition() { return position; };
         Size GetSize() { return size; };
-        static bool RectCollision(Position, Size, Position, Size);
-        void SetPosition(int x, int y) { position.x = x; position.y = y; };
+        void SetCollisionMask(CollisionMask*);
+        void SetPosition(int x, int y);
         void SetRoom(Room* room) { this->room = room; };
         virtual void Update();
 
+        // Virtual methods for PhysicsBody
+        virtual void Move(std::vector<Sprite*>*);
+        virtual void PostMove();
+
     protected:
+        CollisionMask* collisionMask;
         bool isMirrored;
         Position position;
-        Position positionDelta;
         Room* room;
         Size size;
-        Skin skin;
+        Skin* skin;
 };
 
 #endif // SPRITE_HPP

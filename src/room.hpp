@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "camera.hpp"
+#include "physicsbody.hpp"
 #include "sprite.hpp"
 
 class Room {
