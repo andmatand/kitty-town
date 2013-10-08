@@ -41,15 +41,9 @@ void PhysicsBody::Move(std::vector<Sprite*>* collidableSprites) {
              sprite != (*collidableSprites).end(); sprite++) {
             // If this sprite is not us
             if ((*sprite) != this) {
-                if (RectCollision(tempPosition,
-                                  this->GetSize(),
-                                  (*sprite)->GetPosition(),
-                                  (*sprite)->GetSize())) {
-
-                    if (MaskOverlap(this, tempPosition, *sprite)) {
-                        collided = true;
-                        break;
-                    }
+                if (IsCollision(this, tempPosition, *sprite)) {
+                    collided = true;
+                    break;
                 }
             }
         }
@@ -67,35 +61,16 @@ void PhysicsBody::PostMove() {
     positionDelta.y = 0;
 }
 
-bool PhysicsBody::RectCollision(Position position1, Size size1,
-                                Position position2, Size size2) {
-    if ((position1.x <= position2.x + (size2.w - 1) &&
-         position1.x + (size1.w - 1) >= position2.x) &&
-        (position1.y <= position2.y + (size2.h - 1) &&
-         position1.y + (size1.h - 1) >= position2.y)) {
-        return true;
-    }
-
-    //if ((position1.x <= position2.x + (size2.w - 1) &&
-    //     position1.x + (size1.w - 1) >= position2.x) &&
-    //    (position1.y + (size1.h / 2) <= position2.y + (size2.h - 1) &&
-    //     position1.y + (size1.h / 2) >= position2.y)) {
-    //    return true;
-    //}
-
-    return false;
-}
-
-bool PhysicsBody::MaskOverlap(Sprite* sprite1, Position sprite1Position,
-                              Sprite* sprite2) {
-    if (CollisionMask::MaskOverlap(sprite1->GetSkin()->GetCollisionMask(),
-                                   sprite1Position,
-                                   sprite1->IsMirrored(),
-                                   false,
-                                   sprite2->GetSkin()->GetCollisionMask(),
-                                   sprite2->GetPosition(),
-                                   sprite2->IsMirrored(),
-                                   false)) {
+bool PhysicsBody::IsCollision(Sprite* sprite1, Position sprite1Position,
+                                  Sprite* sprite2) {
+    if (CollisionMask::IsMaskCollision(sprite1->GetSkin()->GetCollisionMask(),
+                                       sprite1Position,
+                                       sprite1->IsMirrored(),
+                                       false,
+                                       sprite2->GetSkin()->GetCollisionMask(),
+                                       sprite2->GetPosition(),
+                                       sprite2->IsMirrored(),
+                                       false)) {
         return true;
     }
     else {
