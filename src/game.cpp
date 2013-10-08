@@ -75,6 +75,13 @@ bool Game::ProcessInput() {
             if (event.key.keysym.sym == SDLK_ESCAPE) {
                 return true;
             }
+            else if (event.key.keysym.sym == SDLK_F11) {
+                uint32_t flags = SDL_GetWindowFlags(WINDOW);
+                uint32_t newFlags;
+                newFlags = (flags & SDL_WINDOW_FULLSCREEN_DESKTOP ?
+                            0 : SDL_WINDOW_FULLSCREEN_DESKTOP);
+                SDL_SetWindowFullscreen(WINDOW, newFlags);
+            }
         }
     }
 
