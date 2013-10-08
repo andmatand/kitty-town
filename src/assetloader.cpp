@@ -39,24 +39,35 @@ namespace AssetLoader {
     void DestroyAnimations() {
         for (int i = 0; i < NUM_ANIMATIONS; i++) {
             delete [] ANIMATIONS[i].frames;
+            ANIMATIONS[i].frames = NULL;
         }
     }
 
     void DestroyTextures() {
         SDL_DestroyTexture(SPRITE_TEXTURE);
+        SPRITE_TEXTURE = NULL;
+
         SDL_DestroyTexture(BG_TEXTURE);
+        BG_TEXTURE = NULL;
     }
 
     void DestroyCollisionMaskRects() {
         delete [] COLLISION_MASK_RECTS;
+        COLLISION_MASK_RECTS = NULL;
     }
 
     void DestroyCollisionMasks() {
+        for (int i = 0; i < NUM_COLLISION_MASKS; i++) {
+            delete COLLISION_MASKS[i];
+            COLLISION_MASKS[i] = NULL;
+        }
         delete [] COLLISION_MASKS;
+        COLLISION_MASKS = NULL;
     }
 
     void DestroySpriteRects() {
         delete [] SPRITE_RECTS;
+        SPRITE_RECTS = NULL;
     }
 
     void InitAnimations() {
